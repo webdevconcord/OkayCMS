@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "vendor": {
+    "site": "https://pay.concord.ua"
+  },
+  "name": "Concordpay OkayCMS payment module",
+  "description": "Concordpay payment module",
+  "minimumCoreVersion": "4.0",
+  "title": "Concordpay payment module",
+  "author": "https://pay.concord.ua"
+}

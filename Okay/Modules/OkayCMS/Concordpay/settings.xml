@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <name>
+        Concordpay
+    </name>
+    <settings>
+        <variable>concordpay_merchant</variable>
+        <name>{$lang->concord_pay_merchant}</name>
+    </settings>
+    <settings>
+        <variable>concordpay_secretkey</variable>
+        <name>{$lang->concord_pay_secret_key}</name>
+    </settings>
+</module>
