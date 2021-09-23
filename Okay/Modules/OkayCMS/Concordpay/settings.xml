@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-    <name>
-        Concordpay
-    </name>
+    <name>{$lang->okaycms__concordpay__title}</name>
     <settings>
         <variable>concordpay_merchant</variable>
-        <name>{$lang->concord_pay_merchant}</name>
+        <name>{$lang->okaycms__concordpay__merchant}</name>
     </settings>
     <settings>
         <variable>concordpay_secretkey</variable>
-        <name>{$lang->concord_pay_secret_key}</name>
+        <name>{$lang->okaycms__concordpay__secretkey}</name>
     </settings>
 </module>

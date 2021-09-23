@@ -1,0 +1,15 @@
+/*
+!README.md
+Makefile
+!.gitignore
+
+!/Okay
+/Okay/*
+
+!/Okay/Modules
+/Okay/Modules/*
+
+!/Okay/Modules/OkayCMS
+/Okay/Modules/OkayCMS/*
+
+!/Okay/Modules/OkayCMS/Concordpay

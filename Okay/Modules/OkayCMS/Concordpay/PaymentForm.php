@@ -53,6 +53,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
 
     /**
      * @inheritDoc
+     * @throws \Exception
      */
     public function checkoutForm($orderId)
     {
@@ -86,7 +87,8 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $paymentCurrency = $currenciesEntity->get((int)$paymentMethod->currency_id);
         $this->design->assign('currency_iso', $paymentCurrency->code);
 
-        $description = 'Оплата карткою на сайті ' . $_SERVER["HTTP_HOST"] . ', ' . $order->name . ', ' . $order->phone;
+        $description = $this->getDescriptionText($languagesEntity) . ' '. htmlspecialchars($_SERVER["HTTP_HOST"]) .
+            ', ' . $order->name . ' ' . $order->last_name . ', ' . $order->phone;
         $this->design->assign('description', $description);
 
         $this->design->assign('signature', $this->generateHash($settings));
@@ -98,6 +100,14 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $this->design->assign('cancel_url', Router::generateUrl('order', ['url' => $order->url], true));
         $this->design->assign('callback_url', Router::generateUrl('OkayCMS_Concordpay_callback', [], true));
 
+        $this->design->assign('language', $languagesEntity->getMainLanguage()->label);
+
+        // Statistics.
+        $this->design->assign('client_first_name', ($order->name ?? ''));
+        $this->design->assign('client_last_name', ($order->last_name ?? ''));
+        $this->design->assign('email', ($order->email ?? ''));
+        $this->design->assign('phone', ($order->phone ?? ''));
+
         return $this->design->fetch('form.tpl');
     }
 
@@ -108,8 +118,8 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
     private function separateFullNameOnFirstNameAndLastName($fullName)
     {
         $parts = explode(' ', $fullName);
-        $firstName = isset($parts[0]) ? $parts[0] : '';
-        $lastName = isset($parts[1]) ? $parts[1] : '';
+        $firstName = $parts[0] ?? '';
+        $lastName = $parts[1] ?? '';
 
         return [$firstName, $lastName];
     }
@@ -121,7 +131,6 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
     private function getPurchaseNames($purchases)
     {
         $purchasesNames = [];
-
         foreach ($purchases as $purchase) {
             $purchasesNames[] = $purchase->product_name . ' ' . $purchase->variant_name;
         }
@@ -205,5 +214,28 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         }
 
         return $phone;
+    }
+
+    /**
+     * @param $languagesEntity
+     * @return string
+     */
+    private function getDescriptionText($languagesEntity)
+    {
+        $langCode = $languagesEntity->getMainLanguage()->label ?
+            mb_strtolower($languagesEntity->getMainLanguage()->label) :
+            '';
+        switch ($langCode) {
+            case 'ru':
+                $text = 'Оплата картой на сайте';
+                break;
+            case 'ua':
+                $text = 'Оплата карткою на сайті';
+                break;
+            default:
+                $text = 'Payment by card on the site';
+        }
+
+        return $text;
     }
 }
